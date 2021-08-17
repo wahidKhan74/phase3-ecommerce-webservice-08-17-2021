@@ -1,4 +1,4 @@
-package com.dell.webservice.contoller;
+package com.dell.webservice.controller;
 
 import java.util.List;
 
