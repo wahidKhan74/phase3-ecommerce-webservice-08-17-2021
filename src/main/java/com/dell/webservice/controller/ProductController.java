@@ -19,7 +19,6 @@ import com.dell.webservice.exception.ProductNotFoundException;
 import com.dell.webservice.repository.ProductRepsitory;
 
 @RestController
-@RequestMapping("/api")
 public class ProductController {
 
 	@Autowired
@@ -30,9 +29,11 @@ public class ProductController {
 	// get one product
 	@GetMapping("/products/{id}")
 	public Product getOneProduct(@PathVariable("id") int id) {
-		return this.productRepsitory.findById(id).orElseThrow(() -> {
+		Product fetchedProduct=  this.productRepsitory.findById(id).get();
+		if(fetchedProduct== null) {
 			throw new ProductNotFoundException("Product does not exist with id " + id);
-		});
+		}
+		return fetchedProduct;
 	}
 
 	// get all product
@@ -58,9 +59,10 @@ public class ProductController {
 	@PutMapping("/products/{id}")
 	public Product updateOneProduct(@PathVariable("id") int id, @RequestBody(required = false) Product productObj) {
 		
-		this.productRepsitory.findById(id).orElseThrow(() -> {
+		Product fetchedProduct=  this.productRepsitory.findById(id).get();
+		if(fetchedProduct== null) {
 			throw new ProductNotFoundException("Product does not exist with id " + id);
-		});
+		}
 		
 		return this.productRepsitory.save(productObj);
 	}
@@ -68,9 +70,10 @@ public class ProductController {
 	// delete product
 	@DeleteMapping("/products/{id}")
 	public void deleteOneProduct(@PathVariable("id") int id) {
-		Product fetchedProduct = this.productRepsitory.findById(id).orElseThrow(() -> {
+		Product fetchedProduct=  this.productRepsitory.findById(id).get();
+		if(fetchedProduct== null) {
 			throw new ProductNotFoundException("Product does not exist with id " + id);
-		});
+		}
 		this.productRepsitory.delete(fetchedProduct);
 	}
 
